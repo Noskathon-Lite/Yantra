@@ -70,3 +70,40 @@ useEffect(() => {
             setFeedback("No person detected");
             return;
           }
+          const canvasElement = canvasRef.current;
+          const canvasCtx = canvasElement.getContext("2d");
+
+          // Clear the canvas
+          canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
+          // Call function to draw pose landmarks (arm positions)
+          drawArmPose(results, canvasCtx);
+
+          // Process the exercise results
+          calculateExercise(results);
+        });
+
+        cameraScript.onload = () => {
+          if (isCameraActive && !isPaused) {
+            if (videoRef.current) {
+              // Now we can reference window.Camera (loaded from the script)
+              cameraInstance = new window.Camera(videoRef.current, {
+                onFrame: async () => {
+                  await pose.send({ image: videoRef.current });
+                },
+                width: 640,
+                height: 480,
+              });
+              cameraInstance.start();
+              setCamera(cameraInstance);
+              setFeedback("Camera started. Begin your exercise.");
+
+              // Start timer for exercise
+              timerInterval = setInterval(() => setTimer((prev) => prev + 1), 1000);
+            }
+          } else if (cameraInstance) {
+            cameraInstance.stop();
+            clearInterval(timerInterval);
+          }
+        };
+      };
