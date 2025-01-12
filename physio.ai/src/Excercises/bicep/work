@@ -1,0 +1,27 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
+const App = () => {
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [metrics, setMetrics] = useState({ reps: 0, stage: '', form_feedback: '' });
+    const [videoSrc, setVideoSrc] = useState('');
+
+    const startBicep = async () => {
+        try {
+            const response = await axios.post('http://localhost:5000/api/bicep/start');
+            setIsProcessing(true);
+            console.log(response.data.message);
+        } catch (error) {
+            console.error(error.response.data.error);
+        }
+    };
+
+    const stopBicep = async () => {
+        try {
+            const response = await axios.post('http://localhost:5000/api/bicep/stop');
+            setIsProcessing(false);
+            console.log(response.data.message);
+        } catch (error) {
+            console.error(error.response.data.error);
+        }
+    };

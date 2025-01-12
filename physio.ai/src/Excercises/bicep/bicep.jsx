@@ -70,6 +70,7 @@ useEffect(() => {
             setFeedback("No person detected");
             return;
           }
+
           const canvasElement = canvasRef.current;
           const canvasCtx = canvasElement.getContext("2d");
 
@@ -107,6 +108,7 @@ useEffect(() => {
           }
         };
       };
+
       poseScript.onerror = () => {
         setFeedback("Failed to load Mediapipe Pose library");
       };
@@ -187,42 +189,193 @@ const calculateExercise = async (results) => {
       rightWristAngle: rightWristAngle,
     };
 
+    // Use the throttled feedback function
     throttledSendFeedbackData(angleData, currentTime);
-}
-};
-
-
-const sendFeedbackData = async (angleData) => {
-  try {
-    console.log(angleData)
-    const response = await axios.post(`${feedPyhton}/api/get_feedback`, angleData);
-    console.log(angleData); // Log the angle data and feedback
-    setFeedback(response.data);
-    console.log(response.data)
-  } catch (error) {
-    console.error('Error sending feedback data:', error);
   }
 };
 
-const sendRepData = async (currentAngle) => {
-  try {
-    const response = await axios.post(`${pythonBackendUrl}/api/count_reps`, {
-      angle: currentAngle,  // Send the angle for counting reps
+
+  const sendFeedbackData = async (angleData) => {
+    try {
+      console.log(angleData)
+      const response = await axios.post(`${feedPyhton}/api/get_feedback`, angleData);
+      console.log(angleData); // Log the angle data and feedback
+      setFeedback(response.data);
+      console.log(response.data)
+    } catch (error) {
+      console.error('Error sending feedback data:', error);
+    }
+  };
+
+  const sendRepData = async (currentAngle) => {
+    try {
+      const response = await axios.post(`${pythonBackendUrl}/api/count_reps`, {
+        angle: currentAngle,  // Send the angle for counting reps
+      });
+      setRepCount(response.data.reps); // Update rep count from response
+      
+    } catch (error) {
+      console.error('Error sending rep data:', error);
+    }
+  };
+
+  const calculateAngle = (a, b, c) => {
+    const radians = Math.atan2(c.y - b.y, c.x - b.x) - Math.atan2(a.y - b.y, a.x - b.x);
+    let angle = Math.abs((radians * 180.0) / Math.PI);
+    if (angle > 180) angle = 360 - angle;
+    return angle;
+  };
+
+  const drawArmPose = (results, canvasCtx) => {
+    const poseLandmarks = results.poseLandmarks;
+    const armLandmarks = [11, 13, 15, 12, 14, 16]; // Left and Right shoulder, elbow, wrist
+
+    canvasCtx.save();
+    canvasCtx.lineWidth = 4;
+    canvasCtx.strokeStyle = "lime"; // Color for the connecting lines
+
+    // Draw lines connecting shoulder -> elbow -> wrist (left and right arms)
+    const drawLine = (start, end) => {
+      canvasCtx.beginPath();
+      canvasCtx.moveTo(poseLandmarks[start].x * 640, poseLandmarks[start].y * 480); // Move to the start point
+      canvasCtx.lineTo(poseLandmarks[end].x * 640, poseLandmarks[end].y * 480);     // Draw line to the end point
+      canvasCtx.stroke();
+    };
+
+    // Left arm: shoulder (11) -> elbow (13) -> wrist (15)
+    drawLine(11, 13); // Shoulder to Elbow (left)
+    drawLine(13, 15); // Elbow to Wrist (left)
+
+    // Right arm: shoulder (12) -> elbow (14) -> wrist (16)
+    drawLine(12, 14); // Shoulder to Elbow (right)
+    drawLine(14, 16); // Elbow to Wrist (right)
+
+    // Draw the line connecting the two shoulders (left shoulder (11) -> right shoulder (12))
+    drawLine(11, 12);
+
+    // Draw circles for each landmark (elbow, wrist, shoulder)
+    armLandmarks.forEach((index) => {
+      const landmark = poseLandmarks[index];
+      canvasCtx.beginPath();
+      canvasCtx.arc(landmark.x * 640, landmark.y * 480, 5, 0, 2 * Math.PI);
+      canvasCtx.fillStyle = "aqua"; // Color for the dots
+      canvasCtx.fill();
     });
-    setRepCount(response.data.reps); // Update rep count from response
-    
-  } catch (error) {
-    console.error('Error sending rep data:', error);
-  }
+
+    canvasCtx.restore();
+  };
+
+  const handleStartCamera = () => {
+    setIsCameraActive(true);
+    setTimer(0);
+    setRepCount(0);
+    setFeedback("Get ready to start!");
+    // Hit the start API to reset the counter and allow counting to restart
+      const response = axios.post(`${pythonBackendUrl}/api/start`);
+      console.log(response.data.message); // Log the message from the API response
+  };
+
+  const handleStopCamera = async () => {
+    if (camera) {
+      camera.stop();  // Stop the camera instance
+    }
+    setIsCameraActive(false); // Disable camera
+    setIsPaused(false);       // Reset the pause state
+    setTimer(0);              // Reset the timer
+    setRepCount(0);           // Reset the rep count
+    setFeedback("Exercise stopped. All parameters reset.");
+  
+    // Hit the stop API to stop the rep counter and reset the counter
+    try {
+      const response = await axios.post(`${pythonBackendUrl}/api/stop`);
+      console.log(response.data.message); // Log the message from the API response
+    } catch (error) {
+      console.error('Error stopping the rep counter:', error);
+    }
+  };
+  
+  const handlePauseCamera = async () => {
+    const newPauseState = !isPaused;
+    setIsPaused(newPauseState);
+    setFeedback(newPauseState ? "Paused. Resume to continue." : "Resumed!");
+  
+    // Hit the pause or resume API based on the new state
+    try {
+      const apiEndpoint = newPauseState ? `${pythonBackendUrl}/api/pause` : `${pythonBackendUrl}/api/resume`;
+      const response = await axios.post(apiEndpoint);
+      console.log(response.data.message); // Log the message from the API response
+  
+      if (!newPauseState && camera) {
+        camera.start();  // Ensure the camera restarts when resuming
+      }
+    } catch (error) {
+      console.error('Error toggling pause state:', error);
+    }
+  };
+  
+  
+  return (
+    <Container maxWidth="lg">
+      <Typography variant="h3" align="center" gutterBottom>
+        Bicep Tracker
+      </Typography>
+
+      <Grid container spacing={2}>
+        {/* Camera feed with skeleton */}
+        <Grid item xs={7}>
+          <Box position="relative" width="640px" height="480px">
+            {/* Video Feed */}
+            <video ref={videoRef} style={{ position: "absolute", width: "640px", height: "480px", zIndex: 1 }} playsInline />
+            {/* Canvas Overlay */}
+            <canvas ref={canvasRef} width="640" height="480" style={{ position: "absolute", zIndex: 2 }} />
+          </Box>
+        </Grid>
+
+        {/* Right side: Recommended card and tutorial video */}
+        <Grid item xs={5}>
+          {/* Recommended Card */}
+          <Card sx={{ mb: 2 }}>
+            <CardContent>
+              <Typography variant="h6">Recommended</Typography>
+              <Typography>Difficulty: Easy</Typography>
+              <Typography>Duration: {timer} seconds</Typography>
+              <Typography>Reps: {repCount}</Typography>
+              <Typography>Feedback: {feedback}</Typography>
+              <Button onClick={handleStartCamera} variant="contained" color="primary" sx={{ mr: 2 }} disabled={isCameraActive}>
+                Start
+              </Button>
+
+              <Button
+                onClick={handlePauseCamera}
+                variant="contained"
+                color="warning"
+                sx={{ mr: 2 }}
+                style={{ display: isCameraActive ? 'inline-block' : 'none' }}  // Show Pause/Resume only when the camera is active
+              >
+                {isPaused ? "Resume" : "Pause"}
+              </Button>
+
+              <Button
+                onClick={handleStopCamera}
+                variant="contained"
+                color="secondary"
+                sx={{ mr: 2 }}
+                style={{ display: isCameraActive || isPaused ? 'inline-block' : 'none' }}  // Show Stop when camera is active or paused
+              >
+                Stop
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Tutorial Video */}
+          <Paper sx={{ p: 2 }}>
+            <Typography variant="h6">Tutorial Video</Typography>
+            <CardMedia component="video" controls src={bicep} />
+          </Paper>
+        </Grid>
+      </Grid>
+    </Container>
+  );
 };
 
-const calculateAngle = (a, b, c) => {
-  const radians = Math.atan2(c.y - b.y, c.x - b.x) - Math.atan2(a.y - b.y, a.x - b.x);
-  let angle = Math.abs((radians * 180.0) / Math.PI);
-  if (angle > 180) angle = 360 - angle;
-  return angle;
-};
-
-const drawArmPose = (results, canvasCtx) => {
-  const poseLandmarks = results.poseLandmarks;
-  const armLandmarks = [11, 13, 15, 12, 14, 16]; // Left and Right shoulder, elbow, wrist
+export default ExercisePose;
