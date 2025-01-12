@@ -84,8 +84,14 @@ def suggest_exercises():
             messages=[{"role": "user", "content": prompt}]
         )
 
+<<<<<<< HEAD
         # Extract the assistant's reply
         assistant_message = response.choices[0].message.content.strip().splitlines()
+=======
+
+ # Extract the assistant's reply
+      assistant_message = response.choices[0].message.content.strip().splitlines()
+>>>>>>> 6ea405f74732d555000e6e3ae91a9fd00e2a6366
 
         recommended_exercises = []
         for exercise in assistant_message:
@@ -97,7 +103,7 @@ def suggest_exercises():
                     "description": name_desc[1].strip().strip("'")
                 })
         print(jsonify(recommended_exercises) )
-        return jsonify({
+        return jsonify({  
             "exercises": recommended_exercises  # Return only the recommended exercise names and descriptions
         })
 
