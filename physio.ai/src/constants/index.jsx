@@ -149,7 +149,7 @@ export const pricingOptions = [
 ];
 
 export const resourcesLinks = [
-  { href: "#", text: "Getting Started with SajiloRehab" },
+  { href: "#", text: "Getting Started with Physio.ai" },
   { href: "#", text: "Exercise Library" },
   { href: "#", text: "Recovery Tips" },
   { href: "#", text: "FAQ" },
