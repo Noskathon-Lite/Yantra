@@ -85,6 +85,7 @@ def suggest_exercises():
         )
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
  # Extract the assistant's reply
       assistant_message = response.choices[0].message.content.strip().splitlines()
@@ -92,6 +93,15 @@ def suggest_exercises():
         # Extract the assistant's reply
         assistant_message = response.choices[0].message.content.strip().splitlines()
 >>>>>>> cc16a962383186377bac71a4b0d46c2efc72c494
+=======
+        # Extract the assistant's reply
+        assistant_message = response.choices[0].message.content.strip().splitlines()
+=======
+
+ # Extract the assistant's reply
+      assistant_message = response.choices[0].message.content.strip().splitlines()
+>>>>>>> 6ea405f74732d555000e6e3ae91a9fd00e2a6366
+>>>>>>> 9af5ca6f75a5b27bbb8b8f6f53ff9ce0c89c2dd2
 
         recommended_exercises = []
         for exercise in assistant_message:
