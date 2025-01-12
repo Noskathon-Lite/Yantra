@@ -49,3 +49,27 @@ exercise_details = {
     'Knee to Chest Stretch': 'Stretches the lower back and glutes.',
     'Pigeon Pose': 'A yoga pose that stretches the hips and glutes.'
 }
+
+     @app.route('/')
+def home():
+    return "This is the API for physio.ai"
+@app.route('/wake-up', methods=['GET'])
+def wake_up():
+    return "Python backend is awake!"
+
+@app.route('/api/suggest-exercises', methods=['POST'])
+def suggest_exercises():
+    try:
+        data = request.json
+        if not data or 'message' not in data or 'user_id' not in data:
+            return jsonify({"error": "Invalid input"}), 400
+
+        user_message = data['message']
+
+        # Prepare the prompt to recommend exactly 4 exercises with descriptions
+        prompt = (
+            "You are a physiotherapy assistant. The user has reported the following injury: "
+            f"'{user_message}'. Based on this injury, recommend exactly two to four suitable available(if suitable exercises in below list recommend 4) physiotherapy exercises from the following list: "
+            f"{', '.join(exercise_details.keys())}. Please list the exercises along with descriptions in the format: "
+            "'exercise name': 'description'. Please ensure that the exercise names are presented without numbering and dont write any other things like I recommend as it goes against my backend model."
+        )
