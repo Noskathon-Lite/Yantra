@@ -151,6 +151,41 @@ def count_reps():
 
     return jsonify({"reps": counter})
 
+# Route to pause the rep counter
+@app.route('/api/pause', methods=['POST'])
+def pause_counter():
+    global is_paused, is_stopped
+    if not is_stopped:
+        is_paused = True
+    return jsonify({"message": "Rep counter paused."})
 
+# Route to stop the rep counter and reset the counter to 0
+@app.route('/api/stop', methods=['POST'])
+def stop_counter():
+    global counter, is_paused, is_stopped
+    counter = 0
+    is_paused = False  # Reset pause state when stopping
+    is_stopped = True  # Set stopped to true
+    return jsonify({"message": "Rep counter stopped and reset to 0."})
+
+# Route to resume the rep counter
+@app.route('/api/resume', methods=['POST'])
+def resume_counter():
+    global is_paused, is_stopped
+    if is_stopped:
+        return jsonify({"message": "Cannot resume because the counter is stopped. Please start the exercise again."}), 400
+
+    is_paused = False
+    is_stopped = False
+    return jsonify({"message": "Rep counter resumed."})
+
+# Route to start the counter again after stopping
+@app.route('/api/start', methods=['POST'])
+def start_counter():
+    global counter, is_paused, is_stopped
+    counter = 0  # Reset the counter
+    is_paused = False
+    is_stopped = False  # Reset the stopped state
+    return jsonify({"message": "Rep counter started from zero."})
 
 
