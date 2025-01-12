@@ -54,3 +54,29 @@ export const getAllUsers = async (req, res) => {
       });
     }
   };
+  // Update a user by ID
+export const updateUser = async (req, res) => {
+    try {
+      const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true
+      });
+      if (!user) {
+        return res.status(404).json({
+          status: 'fail',
+          message: 'User not found'
+        });
+      }
+      res.status(200).json({
+        status: 'success',
+        data: {
+          user
+        }
+      });
+    } catch (err) {
+      res.status(500).json({
+        status: 'error',
+        message: err.message
+      });
+    }
+  };
