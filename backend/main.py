@@ -105,6 +105,9 @@ def get_feedback():
         print("Error in get_feedback endpoint:", e)
         return jsonify({"error": "An error occurred while processing the request."}), 500
 
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=3000, debug=False)  # debug set to False
+
         
         
         
