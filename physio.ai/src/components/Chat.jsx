@@ -28,7 +28,14 @@ const Chat = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-
+    useEffect(() => {
+        const token = localStorage.getItem('token'); 
+        if (!token) {
+            navigate('/signup'); 
+        }
+    }, [navigate]); 
+    // Using the Node.js backend URL
+const nodeBackendUrl = import.meta.env.VITE_API_NODE_BACKEND;
 
 // Using the Python backend URL
 const pythonBackendUrl = import.meta.env.VITE_API_PYTHON_BACKEND;
@@ -63,14 +70,33 @@ const pythonBackendUrl = import.meta.env.VITE_API_PYTHON_BACKEND;
 
     const handleAccept = async () => {
         try {
-            console.log(accepted)
+            const token = localStorage.getItem('token'); 
+            const exerciseData = {
+                exercises,
+                injuryType,
+                injuryDuration,
+                injurySeverity,
+                additionalDetails,
+            };
+
+            const response = await axios.post(`${nodeBackendUrl}/api/v1/exercises/save-exercises`, exerciseData, {
+                headers: {
+                    Authorization: `Bearer ${token}`, 
+                },
+            });
+
+            navigate('/dashboard', { state: { exercises, injuryType, injuryDuration, injurySeverity } });
         } catch (error) {
             console.error('Error saving exercises:', error);
         }
     };
 
     const handleReject = () => {
-        console.log(rejected)
+        setExercises([]);
+        setInjuryType("");
+        setInjuryDuration("");
+        setInjurySeverity("");
+        setAdditionalDetails("");
     };
 
     return (
