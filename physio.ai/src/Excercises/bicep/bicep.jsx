@@ -25,7 +25,7 @@ const nodeBackendUrl = import.meta.env.VITE_API_NODE_BACKEND;
 // Using the Python backend URL
 const pythonBackendUrl = import.meta.env.VITE_API_PYTHON_BACKEND;
 
-const feedPyhton="https://feedback-64zm.onrender.com"
+const feedPyhton="http://localhost:3000"
 useEffect(() => {
   let cameraInstance;
   let timerInterval;
