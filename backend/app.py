@@ -73,3 +73,33 @@ def suggest_exercises():
             f"{', '.join(exercise_details.keys())}. Please list the exercises along with descriptions in the format: "
             "'exercise name': 'description'. Please ensure that the exercise names are presented without numbering and dont write any other things like I recommend as it goes against my backend model."
         )
+
+ # Call the GPT-3.5 model using the g4f client
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}]
+        )
+
+
+ # Extract the assistant's reply
+        assistant_message = response.choices[0].message.content.strip().splitlines()
+
+        recommended_exercises = []
+        for exercise in assistant_message:
+            # Split by ':', expecting format like "exercise name: description"
+            name_desc = exercise.split(':', 1)
+            if len(name_desc) == 2:
+                recommended_exercises.append({
+                    "name": name_desc[0].strip().strip("'"),
+                    "description": name_desc[1].strip().strip("'")
+                })
+        print(jsonify(recommended_exercises) )
+        return jsonify({
+            "exercises": recommended_exercises  # Return only the recommended exercise names and descriptions
+        })
+
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return jsonify({"error": "An unexpected error occurred."}), 500
+
+
