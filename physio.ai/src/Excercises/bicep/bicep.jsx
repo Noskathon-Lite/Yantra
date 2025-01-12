@@ -261,3 +261,42 @@ const drawArmPose = (results, canvasCtx) => {
 
   canvasCtx.restore();
 };
+const handleStartCamera = () => {
+    setIsCameraActive(true);
+    setTimer(0);
+    setRepCount(0);
+    setFeedback("Get ready to start!");
+    // Hit the start API to reset the counter and allow counting to restart
+      const response = axios.post(`${pythonBackendUrl}/api/start`);
+      console.log(response.data.message); // Log the message from the API response
+  };
+
+  const handleStopCamera = async () => {
+    if (camera) {
+      camera.stop();  // Stop the camera instance
+    }
+    setIsCameraActive(false); // Disable camera
+    setIsPaused(false);       // Reset the pause state
+    setTimer(0);              // Reset the timer
+    setRepCount(0);           // Reset the rep count
+    setFeedback("Exercise stopped. All parameters reset.");
+  
+    // Hit the stop API to stop the rep counter and reset the counter
+    try {
+      const response = await axios.post(`${pythonBackendUrl}/api/stop`);
+      console.log(response.data.message); // Log the message from the API response
+    } catch (error) {
+      console.error('Error stopping the rep counter:', error);
+    }
+  };
+  
+  const handlePauseCamera = async () => {
+    const newPauseState = !isPaused;
+    setIsPaused(newPauseState);
+    setFeedback(newPauseState ? "Paused. Resume to continue." : "Resumed!");
+  
+    // Hit the pause or resume API based on the new state
+    try {
+      const apiEndpoint = newPauseState ? `${pythonBackendUrl}/api/pause` : `${pythonBackendUrl}/api/resume`;
+      const response = await axios.post(apiEndpoint);
+      console.log(response.data.message); // Log the message from the API response
