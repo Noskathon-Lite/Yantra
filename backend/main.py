@@ -26,3 +26,28 @@ def calculate_average_angle(history, key):
     :return: Average value of the specified key.
     """
     return sum(entry[key] for entry in history) / len(history)
+
+def generate_feedback(history):
+    """
+    Generate feedback for bicep curl form based on angle history using g4f.
+    :param history: List of dictionaries containing angle data.
+    :return: Feedback string for the user.
+    """
+    if not history:
+        return "No movement detected."
+
+    try:
+        # Calculate average angles for relevant joints
+        avg_angles = {
+            "leftShoulderAngle": calculate_average_angle(history, "leftShoulderAngle"),
+            "rightShoulderAngle": calculate_average_angle(history, "rightShoulderAngle"),
+            "leftElbowAngle": calculate_average_angle(history, "leftElbowAngle"),
+            "rightElbowAngle": calculate_average_angle(history, "rightElbowAngle"),
+            "leftWristAngle": calculate_average_angle(history, "leftWristAngle"),
+            "rightWristAngle": calculate_average_angle(history, "rightWristAngle"),
+        }
+
+        # Prepare the input for GPT
+        user_input = ", ".join(
+            f"Average {key}: {value:.2f} degrees" for key, value in avg_angles.items()
+        )
