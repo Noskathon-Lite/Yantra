@@ -146,3 +146,83 @@ const calculateExercise = async (results) => {
   const rightShoulder = landmarks[12];
   const rightElbow = landmarks[14];
   const rightWrist = landmarks[16];
+
+  // Calculate angles for both arms
+  const leftShoulderAngle = calculateAngle(leftShoulder, leftElbow, leftWrist);
+  const rightShoulderAngle = calculateAngle(rightShoulder, rightElbow, rightWrist);
+  const leftElbowAngle = calculateAngle(leftElbow, leftWrist, leftShoulder);
+  const rightElbowAngle = calculateAngle(rightElbow, rightWrist, rightShoulder);
+  const leftWristAngle = calculateAngle(leftWrist, leftElbow, leftShoulder);
+  const rightWristAngle = calculateAngle(rightWrist, rightElbow, rightShoulder);
+
+  // Check if the angles are within acceptable range for a correct bicep curl
+  const idealElbowAngle = 90; // Assuming 90 degrees is the ideal for a full bicep curl
+  const tolerance = 10; // ±10 degrees tolerance
+
+  const isLeftCurlCorrect = leftElbowAngle >= idealElbowAngle - tolerance && leftElbowAngle <= idealElbowAngle + tolerance;
+  const isRightCurlCorrect = rightElbowAngle >= idealElbowAngle - tolerance && rightElbowAngle <= idealElbowAngle + tolerance;
+
+  // Get the current time
+  const currentTime = Date.now();
+  const timeSinceLastFeedback = currentTime - lastFeedbackTimeRef.current; // Using ref value instead of state
+
+  // Rep counting based on current angle
+  const leftAngle = calculateAngle(leftShoulder, leftElbow, leftWrist);
+  const rightAngle = calculateAngle(rightShoulder, rightElbow, rightWrist);
+  const isLeftCurl = leftWrist.y < rightWrist.y;
+  const currentAngle = isLeftCurl ? leftAngle : rightAngle;
+
+  await sendRepData(currentAngle);
+
+  // Feedback only after 10 seconds or more
+  if (isLeftCurlCorrect && isRightCurlCorrect) {
+    setFeedback("You are doing it right, keep going!");
+  } else if (timeSinceLastFeedback >= 10000) { // Throttle feedback every 10 seconds
+    const angleData = {
+      leftShoulderAngle: leftShoulderAngle,
+      rightShoulderAngle: rightShoulderAngle,
+      leftElbowAngle: leftElbowAngle,
+      rightElbowAngle: rightElbowAngle,
+      leftWristAngle: leftWristAngle,
+      rightWristAngle: rightWristAngle,
+    };
+
+    throttledSendFeedbackData(angleData, currentTime);
+}
+};
+
+
+const sendFeedbackData = async (angleData) => {
+  try {
+    console.log(angleData)
+    const response = await axios.post(`${feedPyhton}/api/get_feedback`, angleData);
+    console.log(angleData); // Log the angle data and feedback
+    setFeedback(response.data);
+    console.log(response.data)
+  } catch (error) {
+    console.error('Error sending feedback data:', error);
+  }
+};
+
+const sendRepData = async (currentAngle) => {
+  try {
+    const response = await axios.post(`${pythonBackendUrl}/api/count_reps`, {
+      angle: currentAngle,  // Send the angle for counting reps
+    });
+    setRepCount(response.data.reps); // Update rep count from response
+    
+  } catch (error) {
+    console.error('Error sending rep data:', error);
+  }
+};
+
+const calculateAngle = (a, b, c) => {
+  const radians = Math.atan2(c.y - b.y, c.x - b.x) - Math.atan2(a.y - b.y, a.x - b.x);
+  let angle = Math.abs((radians * 180.0) / Math.PI);
+  if (angle > 180) angle = 360 - angle;
+  return angle;
+};
+
+const drawArmPose = (results, canvasCtx) => {
+  const poseLandmarks = results.poseLandmarks;
+  const armLandmarks = [11, 13, 15, 12, 14, 16]; // Left and Right shoulder, elbow, wrist

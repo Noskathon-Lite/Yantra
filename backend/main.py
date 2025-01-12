@@ -51,3 +51,22 @@ def generate_feedback(history):
         user_input = ", ".join(
             f"Average {key}: {value:.2f} degrees" for key, value in avg_angles.items()
         )
+          # Prompt for GPT
+        prompt = (
+            f"You are a fitness assistant. Evaluate the user's bicep curl form based on the following data: {user_input}. "
+            "Provide specific feedback on their posture and form in simple 10-15 words.Proper and simple english"
+        )
+
+    #    # streamed completion
+        response = g4f.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+            stream=True,
+        )
+        print(response)
+        for message in response:
+            print(message, flush=True, end='')
+            return response
+        
+        
+        
