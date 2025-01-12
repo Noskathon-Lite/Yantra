@@ -107,3 +107,82 @@ useEffect(() => {
           }
         };
       };
+      poseScript.onerror = () => {
+        setFeedback("Failed to load Mediapipe Pose library");
+      };
+
+      cameraScript.onerror = () => {
+        setFeedback("Failed to load Mediapipe Camera library");
+      };
+    } catch (error) {
+      console.error("Error loading the Mediapipe Pose library:", error);
+      setFeedback(error?.message || "Error initializing Pose detection."); // Safe access to 'message'
+    }
+  };
+
+  loadPoseLibrary();
+
+  // Clean up when the component unmounts or dependencies change
+  return () => {
+    if (cameraInstance) {
+      cameraInstance.stop();
+    }
+    clearInterval(timerInterval);
+  };
+}, [isCameraActive, isPaused]); // Re-run when camera state changes
+
+ 
+// Move throttle outside of the function to make it persistent
+const throttledSendFeedbackData = throttle(async (angleData, currentTime) => {
+  await sendFeedbackData(angleData);
+  lastFeedbackTimeRef.current = currentTime; // Update last feedback time after sending
+}, 10000);  // Throttle calls to a max of 1 every 10 seconds
+
+const calculateExercise = async (results) => {
+  const landmarks = results.poseLandmarks;
+  const leftShoulder = landmarks[11];
+  const leftElbow = landmarks[13];
+  const leftWrist = landmarks[15];
+  const rightShoulder = landmarks[12];
+  const rightElbow = landmarks[14];
+  const rightWrist = landmarks[16];
+
+  // Calculate angles for both arms
+  const leftShoulderAngle = calculateAngle(leftShoulder, leftElbow, leftWrist);
+  const rightShoulderAngle = calculateAngle(rightShoulder, rightElbow, rightWrist);
+  const leftElbowAngle = calculateAngle(leftElbow, leftWrist, leftShoulder);
+  const rightElbowAngle = calculateAngle(rightElbow, rightWrist, rightShoulder);
+  const leftWristAngle = calculateAngle(leftWrist, leftElbow, leftShoulder);
+  const rightWristAngle = calculateAngle(rightWrist, rightElbow, rightShoulder);
+
+  // Check if the angles are within acceptable range for a correct bicep curl
+  const idealElbowAngle = 90; // Assuming 90 degrees is the ideal for a full bicep curl
+  const tolerance = 10; // ±10 degrees tolerance
+
+  const isLeftCurlCorrect = leftElbowAngle >= idealElbowAngle - tolerance && leftElbowAngle <= idealElbowAngle + tolerance;
+  const isRightCurlCorrect = rightElbowAngle >= idealElbowAngle - tolerance && rightElbowAngle <= idealElbowAngle + tolerance;
+
+  // Get the current time
+  const currentTime = Date.now();
+  const timeSinceLastFeedback = currentTime - lastFeedbackTimeRef.current; // Using ref value instead of state
+
+  // Rep counting based on current angle
+  const leftAngle = calculateAngle(leftShoulder, leftElbow, leftWrist);
+  const rightAngle = calculateAngle(rightShoulder, rightElbow, rightWrist);
+  const isLeftCurl = leftWrist.y < rightWrist.y;
+  const currentAngle = isLeftCurl ? leftAngle : rightAngle;
+
+  await sendRepData(currentAngle);
+
+  // Feedback only after 10 seconds or more
+  if (isLeftCurlCorrect && isRightCurlCorrect) {
+    setFeedback("You are doing it right, keep going!");
+  } else if (timeSinceLastFeedback >= 10000) { // Throttle feedback every 10 seconds
+    const angleData = {
+      leftShoulderAngle: leftShoulderAngle,
+      rightShoulderAngle: rightShoulderAngle,
+      leftElbowAngle: leftElbowAngle,
+      rightElbowAngle: rightElbowAngle,
+      leftWristAngle: leftWristAngle,
+      rightWristAngle: rightWristAngle,
+    };
