@@ -32,4 +32,15 @@ export const saveExercises = async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     }
   };
+  // Function to get all exercises for a user
+export const getExercises = async (req, res) => {
+    const userId = req.user.id;
+  
+    try {
+      // Fetch all exercise documents for the user
+      const exercises = await Exercise.find({ user: userId });
+  
+      if (!exercises || exercises.length === 0) {
+        return res.status(404).json({ error: 'No exercises found for this user' });
+      }
   
