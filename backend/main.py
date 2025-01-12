@@ -67,6 +67,44 @@ def generate_feedback(history):
         for message in response:
             print(message, flush=True, end='')
             return response
+            
+               except Exception as e:
+        print("Error generating feedback:", e)
+        return "Error generating feedback. Please try again."
+
+@app.route('/api/get_feedback', methods=['POST'])
+def get_feedback():
+    """
+    API endpoint to receive angle data and return feedback.
+    :return: JSON response with feedback.
+    """
+    try:
+        data = request.get_json()
+
+        if not data or not isinstance(data, dict):
+            return jsonify({"error": "Invalid input. Expected a JSON object with angle data."}), 400
+
+        # Validate required keys in the data
+        required_keys = [
+            "leftShoulderAngle", "rightShoulderAngle",
+            "leftElbowAngle", "rightElbowAngle",
+            "leftWristAngle", "rightWristAngle"
+        ]
+        if not all(key in data for key in required_keys):
+            return jsonify({"error": f"Missing required angle data: {', '.join(required_keys)}"}), 400
+
+        # Append the new data to angle history
+        angle_history.append(data)
+
+        # Generate feedback based on the angle history
+        feedback = generate_feedback(angle_history)
+       
+
+        return feedback
+    except Exception as e:
+        print("Error in get_feedback endpoint:", e)
+        return jsonify({"error": "An error occurred while processing the request."}), 500
+
         
         
         
