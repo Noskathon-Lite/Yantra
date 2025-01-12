@@ -225,4 +225,39 @@ const calculateAngle = (a, b, c) => {
 
 const drawArmPose = (results, canvasCtx) => {
   const poseLandmarks = results.poseLandmarks;
-  const armLandmarks = [11, 13, 15, 12, 14, 16]; // Left and Right shoulder, elbow, wrist
+  const armLandmarks = [11, 13, 15, 12, 14, 16]; // Left and Right shoulder, elbow, wrist;
+
+  canvasCtx.save();
+  canvasCtx.lineWidth = 4;
+  canvasCtx.strokeStyle = "lime"; // Color for the connecting lines
+
+  // Draw lines connecting shoulder -> elbow -> wrist (left and right arms)
+  const drawLine = (start, end) => {
+    canvasCtx.beginPath();
+    canvasCtx.moveTo(poseLandmarks[start].x * 640, poseLandmarks[start].y * 480); // Move to the start point
+    canvasCtx.lineTo(poseLandmarks[end].x * 640, poseLandmarks[end].y * 480);     // Draw line to the end point
+    canvasCtx.stroke();
+  };
+
+  // Left arm: shoulder (11) -> elbow (13) -> wrist (15)
+  drawLine(11, 13); // Shoulder to Elbow (left)
+  drawLine(13, 15); // Elbow to Wrist (left)
+
+  // Right arm: shoulder (12) -> elbow (14) -> wrist (16)
+  drawLine(12, 14); // Shoulder to Elbow (right)
+  drawLine(14, 16); // Elbow to Wrist (right)
+
+  // Draw the line connecting the two shoulders (left shoulder (11) -> right shoulder (12))
+  drawLine(11, 12);
+
+  // Draw circles for each landmark (elbow, wrist, shoulder)
+  armLandmarks.forEach((index) => {
+    const landmark = poseLandmarks[index];
+    canvasCtx.beginPath();
+    canvasCtx.arc(landmark.x * 640, landmark.y * 480, 5, 0, 2 * Math.PI);
+    canvasCtx.fillStyle = "aqua"; // Color for the dots
+    canvasCtx.fill();
+  });
+
+  canvasCtx.restore();
+};
