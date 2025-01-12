@@ -7,7 +7,7 @@ import Navbar from './components/landing/Navbar';
 import LandingPage from './components/landingpage';
 import About from './components/about'; 
 import Exercise from './components/ExcerciseCard'; // Direct import
-import Login from './components/login';
+
 
 function App() {
   
@@ -18,7 +18,7 @@ function App() {
         <Route path="/" element={<LandingPage/>}></Route>
         <Route path="/about" element={<About />} />
         <Route path="/exercise" element={<Exercise />} />
-        <Route path="/login" element={<Login />} />
+        
       </Routes>
     </Router>
     
@@ -27,3 +27,5 @@ function App() {
 }
 
 export default App
+//<Route path="/login" element={<Login />} />
+//import Login from './components/login';
