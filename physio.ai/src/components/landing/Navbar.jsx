@@ -71,7 +71,7 @@ const ResponsiveNavbar = () => {
             }}
             onClick={() => navigate('/')}
           >
-            SajiloRehab
+            Physio.ai
           </Typography>
         </Box>
 
