@@ -90,7 +90,11 @@ def suggest_exercises():
 <<<<<<< HEAD
 =======
 =======
+<<<<<<< HEAD
 >>>>>>> 64f37e3f5798ec11a73de67554fa9630ab2a90e4
+=======
+>>>>>>> 9738070785efcf39760e7d6d50735d68331c8fb1
+>>>>>>> 57928fa62ed60a6f550c10663f934b33ac8a8f4c
 
  # Extract the assistant's reply
       assistant_message = response.choices[0].message.content.strip().splitlines()
@@ -100,11 +104,19 @@ def suggest_exercises():
 >>>>>>> cc16a962383186377bac71a4b0d46c2efc72c494
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 77b0becc8ff96d52ad87716352df5519e8df779e
 =======
 =======
 >>>>>>> 08b4c7cdf5ae985dc746f571408eaa63d8bc29f1
 >>>>>>> 64f37e3f5798ec11a73de67554fa9630ab2a90e4
+=======
+=======
+>>>>>>> 08b4c7cdf5ae985dc746f571408eaa63d8bc29f1
+=======
+>>>>>>> 77b0becc8ff96d52ad87716352df5519e8df779e
+>>>>>>> 9738070785efcf39760e7d6d50735d68331c8fb1
+>>>>>>> 57928fa62ed60a6f550c10663f934b33ac8a8f4c
         # Extract the assistant's reply
         assistant_message = response.choices[0].message.content.strip().splitlines()
 =======
@@ -114,10 +126,17 @@ def suggest_exercises():
 >>>>>>> 6ea405f74732d555000e6e3ae91a9fd00e2a6366
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 9af5ca6f75a5b27bbb8b8f6f53ff9ce0c89c2dd2
 =======
 >>>>>>> 64f37e3f5798ec11a73de67554fa9630ab2a90e4
+=======
+>>>>>>> 9af5ca6f75a5b27bbb8b8f6f53ff9ce0c89c2dd2
+=======
+=======
+>>>>>>> 9738070785efcf39760e7d6d50735d68331c8fb1
+>>>>>>> 57928fa62ed60a6f550c10663f934b33ac8a8f4c
 =======
 
  # Extract the assistant's reply
@@ -128,12 +147,21 @@ def suggest_exercises():
 >>>>>>> cc16a962383186377bac71a4b0d46c2efc72c494
 >>>>>>> 5f01e4b4dc063903a602a8cedd8497d2884650bd
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 9af5ca6f75a5b27bbb8b8f6f53ff9ce0c89c2dd2
 >>>>>>> 77b0becc8ff96d52ad87716352df5519e8df779e
 =======
 >>>>>>> 08b4c7cdf5ae985dc746f571408eaa63d8bc29f1
 >>>>>>> 64f37e3f5798ec11a73de67554fa9630ab2a90e4
+=======
+>>>>>>> 08b4c7cdf5ae985dc746f571408eaa63d8bc29f1
+=======
+=======
+>>>>>>> 9af5ca6f75a5b27bbb8b8f6f53ff9ce0c89c2dd2
+>>>>>>> 77b0becc8ff96d52ad87716352df5519e8df779e
+>>>>>>> 9738070785efcf39760e7d6d50735d68331c8fb1
+>>>>>>> 57928fa62ed60a6f550c10663f934b33ac8a8f4c
 
         recommended_exercises = []
         for exercise in assistant_message:

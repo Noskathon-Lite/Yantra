@@ -51,3 +51,63 @@ def generate_feedback(history):
         user_input = ", ".join(
             f"Average {key}: {value:.2f} degrees" for key, value in avg_angles.items()
         )
+          # Prompt for GPT
+        prompt = (
+            f"You are a fitness assistant. Evaluate the user's bicep curl form based on the following data: {user_input}. "
+            "Provide specific feedback on their posture and form in simple 10-15 words.Proper and simple english"
+        )
+
+    #    # streamed completion
+        response = g4f.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+            stream=True,
+        )
+        print(response)
+        for message in response:
+            print(message, flush=True, end='')
+            return response
+            
+               except Exception as e:
+        print("Error generating feedback:", e)
+        return "Error generating feedback. Please try again."
+
+@app.route('/api/get_feedback', methods=['POST'])
+def get_feedback():
+    """
+    API endpoint to receive angle data and return feedback.
+    :return: JSON response with feedback.
+    """
+    try:
+        data = request.get_json()
+
+        if not data or not isinstance(data, dict):
+            return jsonify({"error": "Invalid input. Expected a JSON object with angle data."}), 400
+
+        # Validate required keys in the data
+        required_keys = [
+            "leftShoulderAngle", "rightShoulderAngle",
+            "leftElbowAngle", "rightElbowAngle",
+            "leftWristAngle", "rightWristAngle"
+        ]
+        if not all(key in data for key in required_keys):
+            return jsonify({"error": f"Missing required angle data: {', '.join(required_keys)}"}), 400
+
+        # Append the new data to angle history
+        angle_history.append(data)
+
+        # Generate feedback based on the angle history
+        feedback = generate_feedback(angle_history)
+       
+
+        return feedback
+    except Exception as e:
+        print("Error in get_feedback endpoint:", e)
+        return jsonify({"error": "An error occurred while processing the request."}), 500
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=3000, debug=False)  # debug set to False
+
+        
+        
+        
