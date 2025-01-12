@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css'
 import Navbar from './components/landing/Navbar';
 import LandingPage from './components/landingpage';
+import About from './components/about'; 
 
 function App() {
   
@@ -14,6 +15,7 @@ function App() {
       <Navbar/>
       <Routes>
         <Route path="/" element={<LandingPage/>}></Route>
+        <Route path="/about" element={<About />} />
       </Routes>
     </Router>
     
