@@ -50,7 +50,7 @@ exercise_details = {
     'Pigeon Pose': 'A yoga pose that stretches the hips and glutes.'
 }
 
-     @app.route('/')
+@app.route('/')
 def home():
     return "This is the API for physio.ai"
 @app.route('/wake-up', methods=['GET'])
