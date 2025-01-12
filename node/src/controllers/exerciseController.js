@@ -13,3 +13,23 @@ export const saveExercises = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
+     // Create a new Exercise document for each set of exercises
+     const newExerciseRecord = new Exercise({
+        user: userId,
+        exercises,  // Save the exercises array
+        injuryType,  // Save injury type
+        injuryDuration,  // Save injury duration
+        injurySeverity,  // Save injury severity
+        additionalDetails,  // Save additional details if any
+      });
+  
+      // Save the new record to the database
+      await newExerciseRecord.save();
+      
+      res.status(200).json({ message: 'Exercises saved successfully', exercise: newExerciseRecord });
+    } catch (error) {
+      console.error('Error saving exercises:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+  
