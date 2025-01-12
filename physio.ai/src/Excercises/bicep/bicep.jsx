@@ -29,3 +29,44 @@ const feedPyhton="https://feedback-64zm.onrender.com"
 useEffect(() => {
   let cameraInstance;
   let timerInterval;
+
+  const loadPoseLibrary = async () => {
+    try {
+      // Load the Mediapipe Pose library using a script tag
+      const poseScript = document.createElement("script");
+      poseScript.src = "https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js";
+      poseScript.async = true;
+
+      const cameraScript = document.createElement("script");
+      cameraScript.src = "https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js";
+      cameraScript.async = true;
+
+      // Load both Pose and Camera scripts
+      document.body.appendChild(poseScript);
+      document.body.appendChild(cameraScript);
+
+      poseScript.onload = () => {
+        const pose = new window.Pose({
+          locateFile: (file) => {
+            if (file.endsWith(".tflite")) {
+              return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
+            }
+            if (file.endsWith(".data")) {
+              return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
+            }
+            return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
+          }
+        });
+
+        pose.setOptions({
+          modelComplexity: 1,
+          smoothLandmarks: true,
+          minDetectionConfidence: 0.5,
+          minTrackingConfidence: 0.5,
+        });
+
+        pose.onResults((results) => {
+          if (!results.poseLandmarks) {
+            setFeedback("No person detected");
+            return;
+          }
