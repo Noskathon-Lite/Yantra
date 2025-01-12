@@ -186,3 +186,43 @@ const calculateExercise = async (results) => {
       leftWristAngle: leftWristAngle,
       rightWristAngle: rightWristAngle,
     };
+
+    throttledSendFeedbackData(angleData, currentTime);
+}
+};
+
+
+const sendFeedbackData = async (angleData) => {
+  try {
+    console.log(angleData)
+    const response = await axios.post(`${feedPyhton}/api/get_feedback`, angleData);
+    console.log(angleData); // Log the angle data and feedback
+    setFeedback(response.data);
+    console.log(response.data)
+  } catch (error) {
+    console.error('Error sending feedback data:', error);
+  }
+};
+
+const sendRepData = async (currentAngle) => {
+  try {
+    const response = await axios.post(`${pythonBackendUrl}/api/count_reps`, {
+      angle: currentAngle,  // Send the angle for counting reps
+    });
+    setRepCount(response.data.reps); // Update rep count from response
+    
+  } catch (error) {
+    console.error('Error sending rep data:', error);
+  }
+};
+
+const calculateAngle = (a, b, c) => {
+  const radians = Math.atan2(c.y - b.y, c.x - b.x) - Math.atan2(a.y - b.y, a.x - b.x);
+  let angle = Math.abs((radians * 180.0) / Math.PI);
+  if (angle > 180) angle = 360 - angle;
+  return angle;
+};
+
+const drawArmPose = (results, canvasCtx) => {
+  const poseLandmarks = results.poseLandmarks;
+  const armLandmarks = [11, 13, 15, 12, 14, 16]; // Left and Right shoulder, elbow, wrist
