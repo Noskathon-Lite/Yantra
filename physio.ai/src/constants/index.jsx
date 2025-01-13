@@ -31,13 +31,13 @@ export const testimonials = [
     user: "David Johnson",
     company: "MoveWell Physiotherapy",
     image: user3,
-    text: "The real-time feedback provided by SajiloRehab has been a game-changer for my recovery. I feel more confident knowing I’m doing my exercises correctly.",
+    text: "The real-time feedback provided by Physio.ai has been a game-changer for my recovery. I feel more confident knowing I’m doing my exercises correctly.",
   },
   {
     user: "Ronee Brown",
     company: "Heal & Restore Therapy",
     image: user4,
-    text: "Using SajiloRehab was like having a personal therapist guiding me through each session. I saw noticeable improvements in my recovery within weeks!",
+    text: "Using Physio.ai was like having a personal therapist guiding me through each session. I saw noticeable improvements in my recovery within weeks!",
   },
   {
     user: "Michael Wilson",
