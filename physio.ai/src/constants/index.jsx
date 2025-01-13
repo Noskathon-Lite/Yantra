@@ -22,22 +22,22 @@ export const testimonials = [
     text: "Physio.ai has transformed the way we approach rehabilitation. The AI-powered exercises and real-time feedback have significantly improved our patients' recovery times.",
   },
   {
-    user: "Xing liu",
+    user: "Xing liu jing",
     company: "Rehab First Center",
     image: user2,
     text: "As a physical therapist, I love how intuitive and personalized Physio.ai is. It's easy to use and has really helped streamline our patient care.",
   },
   {
-    user: "David Johnson",
+    user: "David Johnson juve",
     company: "MoveWell Physiotherapy",
     image: user3,
-    text: "The real-time feedback provided by SajiloRehab has been a game-changer for my recovery. I feel more confident knowing I’m doing my exercises correctly.",
+    text: "The real-time feedback provided by Physio.ai has been a game-changer for my recovery. I feel more confident knowing I’m doing my exercises correctly.",
   },
   {
-    user: "Ronee Brown",
+    user: "Ronee Browe",
     company: "Heal & Restore Therapy",
     image: user4,
-    text: "Using SajiloRehab was like having a personal therapist guiding me through each session. I saw noticeable improvements in my recovery within weeks!",
+    text: "Using Physio.ai was like having a personal therapist guiding me through each session. I saw noticeable improvements in my recovery within weeks!",
   },
   {
     user: "Michael Wilson",
