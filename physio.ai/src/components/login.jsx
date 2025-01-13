@@ -30,6 +30,7 @@ const LoginWithGoogleButton = () => {
     setError('');
     try {
       // Use the environment variable for the backend URL
+      //environment variables already exist
       const response = await axios.post(`${nodeBackendUrl}/api/v1/auth/login`, formData);
       
       if (response.data.status === 'success') {
