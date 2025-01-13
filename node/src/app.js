@@ -7,6 +7,7 @@ import passport from "passport";
 import exerciseRoutes from "./routes/exerciseRoute.js";
 import userRoutes from "./routes/userRoute.js";
 import authRoutes from "./routes/authRoute.js";
+import progressRoutes from "./routes/progressRoute.js";
 import { signToken,signRefreshToken,durationToMilliseconds } from "./controllers/authController.js"; // Import signToken function
 import { initializePassport } from './config/passport.js'; // Import your passport configuration
 import googleAuthRoutes from './routes/googleRoute.js'; // Import your Google OAuth routes
@@ -45,6 +46,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/exercises", exerciseRoutes);
 app.use('/api/v1/auth', googleAuthRoutes); // Mount your routes on /api/v1/auth
+app.use("/api/v1/progress", progressRoutes);
 
 // Root route
 app.get("/", (req, res) => {
