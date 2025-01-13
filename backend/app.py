@@ -146,7 +146,7 @@ def count_reps():
 
     # Validate incoming data
     if 'angle' not in data:
-        return jsonify({"error": "Angle parameter is required."}), 400
+        return jsonify({"error": "Angle parameter is required."}), 400 #jsonify
 
     angle = data['angle']
 
