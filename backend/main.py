@@ -6,7 +6,6 @@ import g4f
 import numpy as np
 import sys
 import asyncio
-
 # Ensure compatibility with aiodns on Windows
 if sys.platform == 'win32':
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
@@ -51,7 +50,8 @@ def generate_feedback(history):
         user_input = ", ".join(
             f"Average {key}: {value:.2f} degrees" for key, value in avg_angles.items()
         )
-          # Prompt for GPT
+
+        # Prompt for GPT
         prompt = (
             f"You are a fitness assistant. Evaluate the user's bicep curl form based on the following data: {user_input}. "
             "Provide specific feedback on their posture and form in simple 10-15 words.Proper and simple english"
@@ -67,10 +67,16 @@ def generate_feedback(history):
         for message in response:
             print(message, flush=True, end='')
             return response
-            
-               except Exception as e:
+        
+        
+        
+
+        
+        
+    except Exception as e:
         print("Error generating feedback:", e)
         return "Error generating feedback. Please try again."
+
 
 @app.route('/api/get_feedback', methods=['POST'])
 def get_feedback():
@@ -105,9 +111,6 @@ def get_feedback():
         print("Error in get_feedback endpoint:", e)
         return jsonify({"error": "An error occurred while processing the request."}), 500
 
+# Run the app
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=3000, debug=False)  # debug set to False
-
-        
-        
-        
