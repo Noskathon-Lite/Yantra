@@ -104,7 +104,7 @@ def suggest_exercises():
 
     except Exception as e:
         print(f"Error: {str(e)}")
-        return jsonify({"error": "An unexpected error occurred."}), 500
+        return jsonify({"error": "An unexpected error occurred."}), 500 #unexpected error
 
 
 
