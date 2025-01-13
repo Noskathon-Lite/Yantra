@@ -19,13 +19,13 @@ export const testimonials = [
     user: "Anup Adhikari",
     company: "Active Life Clinic",
     image: user1,
-    text: "SajiloRehab has transformed the way we approach rehabilitation. The AI-powered exercises and real-time feedback have significantly improved our patients' recovery times.",
+    text: "Physio.ai has transformed the way we approach rehabilitation. The AI-powered exercises and real-time feedback have significantly improved our patients' recovery times.",
   },
   {
     user: "Xing liu",
     company: "Rehab First Center",
     image: user2,
-    text: "As a physical therapist, I love how intuitive and personalized SajiloRehab is. It's easy to use and has really helped streamline our patient care.",
+    text: "As a physical therapist, I love how intuitive and personalized Physio.ai is. It's easy to use and has really helped streamline our patient care.",
   },
   {
     user: "David Johnson",

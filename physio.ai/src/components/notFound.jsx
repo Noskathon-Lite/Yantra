@@ -49,6 +49,7 @@ const NotFound = () => {
             >
                 Go to Bicep Curls
             </Button>
+            {/* End of error button */}
         </Container>
     );
 };
