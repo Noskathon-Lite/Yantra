@@ -42,7 +42,7 @@ const ResponsiveNavbar = () => {
   // Menu items with conditional pricing/dashboard link based on login status
   const menuItems = [
     { label: 'Home', path: '/' },
-    { label: 'Chat', path: '/chat' },
+    { label: 'Generator', path: '/chat' },
     { label: accessToken ? 'Dashboard' : 'Pricing', path: accessToken ? '/dashboard' : '/price' },
     { label: 'Exercise', path: '/exercise' }
   ];
