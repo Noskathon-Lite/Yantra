@@ -122,8 +122,8 @@ def calculate_angle(a, b, c):
     b = np.array(b)  # Middle joint (e.g., elbow)
     c = np.array(c)  # Last joint (e.g., wrist)
 
-    radians = np.arctan2(c[1] - b[1], c[0] - b[0]) - np.arctan2(a[1] - b[1], a[0] - b[0])
-    angle = np.abs(radians * 180.0 / np.pi)
+    radians = np.arctan2(c[1] - b[1], c[0] - b[0]) - np.arctan2(a[1] - b[1], a[0] - b[0])   #algorithm to calculate angle
+    angle = np.abs(radians * 180.0 / np.pi)   #calculate the angle in radians
 
     if angle > 180.0:
         angle = 360 - angle
