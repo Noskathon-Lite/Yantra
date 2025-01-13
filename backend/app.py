@@ -65,8 +65,8 @@ def wake_up():
 def suggest_exercises():
     try:
         data = request.json
-        if not data or 'message' not in data or 'user_id' not in data:
-            return jsonify({"error": "Invalid input"}), 400
+        if not data or 'message' not in data or 'user_id' not in data: #if statements
+            return jsonify({"error": "Invalid input"}), 400    #if error,invalid input
 
         user_message = data['message']
 
@@ -81,7 +81,7 @@ def suggest_exercises():
         # Call the GPT-3.5 model using the g4f client
         response = client.chat.completions.create(
             model="gpt-4",
-            messages=[{"role": "user", "content": prompt}]
+            messages=[{"role": "user", "content": prompt}]   #msg for gpt model
         )
 
         # Extract the assistant's reply
