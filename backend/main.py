@@ -64,7 +64,7 @@ def generate_feedback(history):
             stream=True,
         )
         print(response)
-        for message in response:
+        for message in response: 
             print(message, flush=True, end='')
             return message
         
@@ -88,11 +88,11 @@ def get_feedback():
         data = request.get_json()
 
         if not data or not isinstance(data, dict):
-            return jsonify({"error": "Invalid input. Expected a JSON object with angle data."}), 400
+            return jsonify({"error": "Invalid input. Expected a JSON object with angle data."}), 400  #invalid input
 
         # Validate required keys in the data
         required_keys = [
-            "leftShoulderAngle", "rightShoulderAngle",
+            "leftShoulderAngle", "rightShoulderAngle", #for shoulder
             "leftElbowAngle", "rightElbowAngle",
             "leftWristAngle", "rightWristAngle"
         ]
@@ -107,10 +107,10 @@ def get_feedback():
        
 
         return feedback
-    except Exception as e:
+    except Exception as e:  #error endpoint
         print("Error in get_feedback endpoint:", e)
         return jsonify({"error": "An error occurred while processing the request."}), 500
 
 # Run the app
-if __name__ == '__main__':
+if __name__ == '__main__':  #statement
     app.run(host="0.0.0.0", port=3000, debug=False)  # debug set to False
