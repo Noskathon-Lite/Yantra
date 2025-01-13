@@ -3,7 +3,7 @@ import Progress from '../models/progressModel.js'
 
 export const updateExerciseProgress = async (req, res) => {
   const { userEmail, exerciseType, repsToday, timeToday } = req.body;
-
+  console.log(req.body)
   if (!userEmail || !exerciseType || typeof repsToday !== 'number' || typeof timeToday !== 'number') {
     return res.status(400).json({ message: 'Invalid request data' });
   }
