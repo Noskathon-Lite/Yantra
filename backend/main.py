@@ -59,14 +59,14 @@ def generate_feedback(history):
 
     #    # streamed completion
         response = g4f.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4",
             messages=[{"role": "user", "content": prompt}],
             stream=True,
         )
         print(response)
         for message in response:
             print(message, flush=True, end='')
-            return response
+            return message
         
         
         
