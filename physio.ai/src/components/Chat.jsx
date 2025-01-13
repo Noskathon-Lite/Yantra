@@ -34,11 +34,9 @@ const Chat = () => {
             navigate('/signup'); 
         }
     }, [navigate]); 
-    // Using the Node.js backend URL
-const nodeBackendUrl = import.meta.env.VITE_API_NODE_BACKEND;
 
-// Using the Python backend URL
-const pythonBackendUrl = import.meta.env.VITE_API_PYTHON_BACKEND;
+    const nodeBackendUrl = import.meta.env.VITE_API_NODE_BACKEND;
+    const pythonBackendUrl = import.meta.env.VITE_API_PYTHON_BACKEND;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -102,7 +100,7 @@ const pythonBackendUrl = import.meta.env.VITE_API_PYTHON_BACKEND;
     return (
         <div className="min-h-screen bg-black text-white">
             <div className="container mx-auto mt-12 px-4">
-                <div className="bg-gray-900 rounded-lg p-8 shadow-xl relative">
+                <div className="bg-gray-900 rounded-lg p-8 shadow-xl relative max-w-4xl mx-auto">
                     <div className="flex items-center space-x-3 mb-6">
                         <div className="bg-orange-500 text-black rounded-full p-3 flex-shrink-0">
                             <FitnessCenterIcon className="h-8 w-8" />
@@ -120,7 +118,7 @@ const pythonBackendUrl = import.meta.env.VITE_API_PYTHON_BACKEND;
                     <Divider className="mb-6 bg-orange-500" />
 
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        <div className="flex items-center space-x-3">
+                        <div className="mt-6 flex items-center space-x-3">
                             <HealingIcon className="text-orange-400" />
                             <TextField
                                 fullWidth
@@ -129,18 +127,18 @@ const pythonBackendUrl = import.meta.env.VITE_API_PYTHON_BACKEND;
                                 onChange={(e) => setInjuryType(e.target.value)}
                                 variant="outlined"
                                 required
-                                InputLabelProps={{ style: { color: '#FFA500' } }}  // Make the label light orange
+                                InputLabelProps={{ style: { color: '#FFA500' } }}
                                 sx={{
                                     '& .MuiOutlinedInput-root': {
                                         color: 'white', 
                                         '& fieldset': {
-                                            borderColor: '#FFA500', // Light orange border
+                                            borderColor: '#FFA500',
                                         },
                                         '&:hover fieldset': {
-                                            borderColor: '#FFA500', // On hover
+                                            borderColor: '#FFA500',
                                         },
                                         '&.Mui-focused fieldset': {
-                                            borderColor: '#FFA500', // On focus
+                                            borderColor: '#FFA500',
                                         },
                                     }
                                 }}
@@ -157,18 +155,18 @@ const pythonBackendUrl = import.meta.env.VITE_API_PYTHON_BACKEND;
                                 onChange={(e) => setInjuryDuration(e.target.value)}
                                 variant="outlined"
                                 required
-                                InputLabelProps={{ style: { color: '#FFA500' } }}  // Make the label light orange
+                                InputLabelProps={{ style: { color: '#FFA500' } }}
                                 sx={{
                                     '& .MuiOutlinedInput-root': {
                                         color: 'white', 
                                         '& fieldset': {
-                                            borderColor: '#FFA500', // Light orange border
+                                            borderColor: '#FFA500',
                                         },
                                         '&:hover fieldset': {
-                                            borderColor: '#FFA500', // On hover
+                                            borderColor: '#FFA500',
                                         },
                                         '&.Mui-focused fieldset': {
-                                            borderColor: '#FFA500', // On focus
+                                            borderColor: '#FFA500',
                                         },
                                     }
                                 }}
@@ -185,18 +183,18 @@ const pythonBackendUrl = import.meta.env.VITE_API_PYTHON_BACKEND;
                                 onChange={(e) => setInjurySeverity(e.target.value)}
                                 variant="outlined"
                                 required
-                                InputLabelProps={{ style: { color: '#FFA500' } }}  // Make the label light orange
+                                InputLabelProps={{ style: { color: '#FFA500' } }}
                                 sx={{
                                     '& .MuiOutlinedInput-root': {
                                         color: 'white', 
                                         '& fieldset': {
-                                            borderColor: '#FFA500', // Light orange border
+                                            borderColor: '#FFA500',
                                         },
                                         '&:hover fieldset': {
-                                            borderColor: '#FFA500', // On hover
+                                            borderColor: '#FFA500',
                                         },
                                         '&.Mui-focused fieldset': {
-                                            borderColor: '#FFA500', // On focus
+                                            borderColor: '#FFA500',
                                         },
                                     }
                                 }}
@@ -214,18 +212,18 @@ const pythonBackendUrl = import.meta.env.VITE_API_PYTHON_BACKEND;
                                 value={additionalDetails}
                                 onChange={(e) => setAdditionalDetails(e.target.value)}
                                 variant="outlined"
-                                InputLabelProps={{ style: { color: '#FFA500' } }}  // Make the label light orange
+                                InputLabelProps={{ style: { color: '#FFA500' } }}
                                 sx={{
                                     '& .MuiOutlinedInput-root': {
                                         color: 'white', 
                                         '& fieldset': {
-                                            borderColor: '#FFA500', // Light orange border
+                                            borderColor: '#FFA500',
                                         },
                                         '&:hover fieldset': {
-                                            borderColor: '#FFA500', // On hover
+                                            borderColor: '#FFA500',
                                         },
                                         '&.Mui-focused fieldset': {
-                                            borderColor: '#FFA500', // On focus
+                                            borderColor: '#FFA500',
                                         },
                                     }
                                 }}

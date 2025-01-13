@@ -1,4 +1,3 @@
-// controllers/exerciseController.js
 import Exercise from '../models/exerciseModel.js'; // Adjust the path as necessary
 import User from '../models/userModel.js'; // Adjust the path as necessary
 
@@ -37,18 +36,19 @@ export const saveExercises = async (req, res) => {
 
 // Function to get all exercises for a user
 export const getExercises = async (req, res) => {
-    const userId = req.user.id;
-  
-    try {
-      // Fetch all exercise documents for the user
-      const exercises = await Exercise.find({ user: userId });
-  
-      if (!exercises || exercises.length === 0) {
-        return res.status(404).json({ error: 'No exercises found for this user' });
-      }
-      res.status(200).json({ status: 'success', exercises });
-    } catch (error) {
-      console.error('Error fetching exercises:', error);
-      res.status(500).json({ error: 'Internal server error' });
+  const userId = req.user.id;
+
+  try {
+    // Fetch all exercise documents for the user
+    const exercises = await Exercise.find({ user: userId });
+
+    if (!exercises || exercises.length === 0) {
+      return res.status(404).json({ error: 'No exercises found for this user' });
     }
-  };
+
+    res.status(200).json({ status: 'success', exercises });
+  } catch (error) {
+    console.error('Error fetching exercises:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
