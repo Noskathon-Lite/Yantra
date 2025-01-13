@@ -6,7 +6,7 @@ import g4f
 import numpy as np
 import sys
 import asyncio
-
+#final
 
 # This is needed for Windows compatibility with aiodns
 
@@ -53,6 +53,7 @@ exercise_details = {
     'Knee to Chest Stretch': 'Stretches the lower back and glutes.',
     'Pigeon Pose': 'A yoga pose that stretches the hips and glutes.'
 }
+
 
 @app.route('/')
 def home():

@@ -97,7 +97,7 @@ const pythonBackendUrl = import.meta.env.VITE_API_PYTHON_BACKEND;
                 align="center"
                 sx={{ mb: 4, color: '#fff', fontWeight: 'bold' }}
             >
-                SajiloRehab Exercise Guide
+                Physio.ai Exercise Guide
             </Typography>
 
             {/* Filter by Category */}
