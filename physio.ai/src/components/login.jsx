@@ -14,6 +14,7 @@ const LoginWithGoogleButton = () => {
   const navigate = useNavigate();
 
   // Use the Node.js backend URL from environment variables
+  //utilizing googleauth
   const nodeBackendUrl = import.meta.env.VITE_API_NODE_BACKEND;
 
   const handleChange = (e) => {
